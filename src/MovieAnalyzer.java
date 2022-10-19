@@ -305,10 +305,10 @@ public class MovieAnalyzer {
         if (realSize == 0) {
             return 0;
         }
-        BigDecimal num1 = new BigDecimal(Sum);
-        BigDecimal num2 = new BigDecimal(realSize);
-        BigDecimal result = num1.divide(num2, BigDecimal.ROUND_HALF_DOWN, BigDecimal.ROUND_HALF_UP);
-        return result.doubleValue();
+//        BigDecimal num1 = new BigDecimal(Sum);
+//        BigDecimal num2 = new BigDecimal(realSize);
+//        BigDecimal result = num1.divide(num2, BigDecimal.ROUND_HALF_DOWN, BigDecimal.ROUND_HALF_UP);
+        return Sum / realSize;
     }
 
     public double getAverageRate(List<Movie> staredMovies) {
