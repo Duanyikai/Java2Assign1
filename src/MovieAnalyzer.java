@@ -322,7 +322,7 @@ public class MovieAnalyzer {
             realSize++;
         }
         if (realSize == 0) {
-            return 0;
+            return 0;//
         }
 //        BigDecimal num1 = new BigDecimal(Sum);
 //        BigDecimal num2 = new BigDecimal(realSize);
