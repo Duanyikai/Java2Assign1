@@ -14,6 +14,7 @@ public class MovieAnalyzer {
     List<Movie> movies;
     String dataset_path;
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public MovieAnalyzer(String dataset_path) throws IOException {
         this.dataset_path = dataset_path;
         File csv = new File(dataset_path);
@@ -86,27 +87,23 @@ public class MovieAnalyzer {
             map.put(entry.getKey(), entry.getValue().intValue());
         }
 
-        Map<String, Integer> map2 = map
+        return map
                 .entrySet()
                 .stream()
-                .sorted(Collections.reverseOrder(new Comparator<Map.Entry<String, Integer>>() {
-                    @Override
-                    public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-                        if (o1 != null && o2 != null) {
-                            if (o1.getValue().equals(o2.getValue())) {
-                                String s1 = (String) o1.getKey();
-                                String s2 = (String) o2.getKey();
-                                return -s1.compareTo(s2);
-                            } else {
-                                return o1.getValue().compareTo(o2.getValue());
-                            }
+                .sorted(Collections.reverseOrder((o1, o2) -> {
+                    if (o1 != null && o2 != null) {
+                        if (o1.getValue().equals(o2.getValue())) {
+                            String s1 = o1.getKey();
+                            String s2 = o2.getKey();
+                            return -s1.compareTo(s2);
                         } else {
-                            throw new RuntimeException();
+                            return o1.getValue().compareTo(o2.getValue());
                         }
+                    } else {
+                        throw new RuntimeException();
                     }
                 }))
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
-        return map2;
     }
 
     public Map<String, Long> addMap1(Map<String,Long> map1, Map<String,Long> map2) {
@@ -139,27 +136,6 @@ public class MovieAnalyzer {
     }
 
     public Map<List<String>, Integer> getCoStarCount() {
-//        Map<List<String>, Long> collect = new HashMap<>();
-//        LinkedHashSet<List<String>> set = new LinkedHashSet<>();
-//        for (Movie movie: movies) {
-//            List<List<String>> list = movie.getCostars();
-//            set.addAll(list);
-//        }
-//        List<List<String>> realCoStarsList = set.stream().toList();
-//        for (List<String> coS: realCoStarsList) {
-//            for (int i = 0; i < coS.size(); i++) {
-//                coS.set(i, coS.get(i).replaceAll("\\d", ""));
-//            }
-//        }
-//        for (List<String> costars: realCoStarsList) {
-//            List<Movie> coStaredMovie = movies.stream().filter(m -> m.hasCoStar(costars)).toList();
-//            if (collect.containsKey(costars)) {
-//                collect.put(costars, collect.get(costars) + 1);
-//            } else {
-//                collect.put(costars, coStaredMovie.size());
-//            }
-//
-//        }
         List<List<String>> lists = new ArrayList<>();
         for (Movie movie: movies) {
             List<List<String>> list = movie.getCostars();
@@ -171,35 +147,6 @@ public class MovieAnalyzer {
             map.put(entry.getKey(), entry.getValue().intValue());
         }
         return map.entrySet().stream().sorted(Collections.reverseOrder(comparingByValue())).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-    }
-
-    public Map<List<String>, Long> addMap2(Map<List<String>,Long> map1, Map<List<String>,Long> map2) {
-        Set<List<String>> keySet1 = map1.keySet();
-        Iterator<List<String>> iterator1 = keySet1.iterator();
-        List<String> key;
-        for (int index = 0; index < keySet1.size(); index++) {
-            key = iterator1.next();
-            Long valueTemp1 = map1.get(key);
-            Long valueTemp2 = map2.get(key);
-            if (null == valueTemp1 || null == valueTemp2) {
-                continue;
-            }
-            map1.put(key, valueTemp1+valueTemp2);
-        }
-        Set<List<String>> keySet2 = map2.keySet();
-        Iterator<List<String>> iterator2 = keySet2.iterator();
-        for (int index = 0; index < keySet2.size(); index++) {
-            key = iterator2.next();
-            Long valueTemp1 = map1.get(key);
-            Long valueTemp2 = map2.get(key);
-            if (null == valueTemp2) {
-                continue;
-            }
-            if (null == valueTemp1) {
-                map1.put(key, valueTemp2);
-            }
-        }
-        return map1;
     }
 
 
@@ -313,9 +260,6 @@ public class MovieAnalyzer {
         if (realSize == 0) {
             return 0;
         }
-//        BigDecimal num1 = new BigDecimal(Sum);
-//        BigDecimal num2 = new BigDecimal(realSize);
-//        BigDecimal result = num1.divide(num2, BigDecimal.ROUND_HALF_DOWN, BigDecimal.ROUND_HALF_UP);
         return Sum / realSize;
     }
 
@@ -332,10 +276,6 @@ public class MovieAnalyzer {
         if (realSize == 0) {
             return 0;
         }
-//        BigDecimal num1 = new BigDecimal(Sum);
-//        BigDecimal num2 = new BigDecimal(realSize);
-//        BigDecimal result = num1.divide(num2, BigDecimal.ROUND_HALF_DOWN, BigDecimal.ROUND_DOWN);
-//        return result.doubleValue();
         return  Sum / realSize;
     }
 

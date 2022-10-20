@@ -96,11 +96,7 @@ public class Movie {
     }
 
     public boolean hasGenre(String genre) {
-        if (genre.equals(getGenre1()) || genre.equals(getGenre2()) || genre.equals(getGenre3())) {
-            return true;
-        } else {
-            return false;
-        }
+        return genre.equals(getGenre1()) || genre.equals(getGenre2()) || genre.equals(getGenre3());
     }
 
 
@@ -156,49 +152,16 @@ public class Movie {
     }
 
     public List<List<String>> getCostars() {
-//        int id = 0;
-//        String[] temp = stars;
-//        for (int i = 0; i < stars.length; i++) {
-//            for (int j = i + 1; j < stars.length; j++) {
-//                if (stars[i].replaceAll("\\d", "").equals(stars[j].replaceAll("\\d", ""))) {
-//                    temp[i] = stars[i] + id;
-//                    id++;
-//                    temp[j] = stars[j] + id;
-//                }
-//            }
-//        }
-
         ArrayList<List<String>> coStarsList = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             for (int j = i + 1; j < 4; j++) {
                 ArrayList<String> coStars = new ArrayList<>();
                 coStars.add(stars[i]);
                 coStars.add(stars[j]);
-                coStars.sort(String::compareToIgnoreCase);
-                coStarsList.add(coStars);
+                coStarsList.add(coStars.stream().sorted().toList());
             }
         }
         return coStarsList;
-    }
-
-    public boolean hasCoStar(List<String> coStar ) {
-        ArrayList<List<String>> coStarsList2 = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            for (int j = i + 1; j < 4; j++) {
-                ArrayList<String> coStars = new ArrayList<>();
-                coStars.add(stars[i]);
-                coStars.add(stars[j]);
-                coStars.sort(String::compareToIgnoreCase);
-                coStarsList2.add(coStars);
-            }
-        }
-
-        for (List<String> cs: coStarsList2) {
-            if (cs.equals(coStar)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public void setStars(String[] stars) {
