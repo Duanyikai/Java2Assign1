@@ -20,21 +20,23 @@ public class Movie {
 
 
 
-    public Movie(String poster_Link, String series_Title, String released_Year, String certificate, String runtime, String genre, String iMDB_Rating, String overview, String meta_score, String director, String star1, String star2, String star3, String star4, String no_of_votes, String gross) {
-        Poster_Link = poster_Link.replace('\"',' ').trim();
+    public Movie(String poster_Link, String series_Title, String released_Year, String certificate,
+                 String runtime, String genre, String iMDB_Rating, String overview,
+                 String meta_score, String director, String star1, String star2, String star3,
+                 String star4, String no_of_votes, String gross) {
+        Poster_Link = poster_Link.replace('\"', ' ').trim();
         Series_Title = series_Title.replace("\"", "");
-//        Series_Title = series_Title;
-        Released_Year = released_Year.equals("") ? Released_Year = 0 :Integer.parseInt(released_Year);
+        Released_Year = released_Year.equals("") ? Released_Year = 0 : Integer.parseInt(released_Year);
         Certificate = certificate;
-        Runtime = Integer.parseInt(runtime.substring(0,runtime.indexOf(" ")));
-        Genre = genre.replace('\"',' ').replace(" ","").split(",");
-        this.IMDB_Rating = iMDB_Rating.equals("") ? IMDB_Rating = 0.0f :  Float.parseFloat(iMDB_Rating);
-        Overview = overview.replace('\"',' ').trim();
+        Runtime = Integer.parseInt(runtime.substring(0, runtime.indexOf(" ")));
+        Genre = genre.replace('\"', ' ').replace(" ", "").split(",");
+        this.IMDB_Rating = iMDB_Rating.equals("") ? IMDB_Rating = 0.0f : Float.parseFloat(iMDB_Rating);
+        Overview = overview.replace('\"', ' ').trim();
         Meta_score = meta_score;
         Director = director;
         stars = new String[]{star1, star2, star3, star4};
-        No_of_votes = no_of_votes.equals("") ? No_of_votes = 0 :Integer.parseInt(no_of_votes);
-        Gross = gross.equals("") ? Gross = 0 : Integer.parseInt(gross.replaceAll("\\D",""));
+        No_of_votes = no_of_votes.equals("") ? No_of_votes = 0 : Integer.parseInt(no_of_votes);
+        Gross = gross.equals("") ? Gross = 0 : Integer.parseInt(gross.replaceAll("\\D", ""));
     }
 
     public String getPoster_Link() {
