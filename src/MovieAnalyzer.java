@@ -1,8 +1,12 @@
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.Map.Entry.comparingByValue;
+import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.toMap;
 
 public class MovieAnalyzer {
@@ -135,31 +139,38 @@ public class MovieAnalyzer {
     }
 
     public Map<List<String>, Integer> getCoStarCount() {
-        Map<List<String>, Integer> collect = new HashMap<>();
-        LinkedHashSet<List<String>> set = new LinkedHashSet<>();
+//        Map<List<String>, Long> collect = new HashMap<>();
+//        LinkedHashSet<List<String>> set = new LinkedHashSet<>();
+//        for (Movie movie: movies) {
+//            List<List<String>> list = movie.getCostars();
+//            set.addAll(list);
+//        }
+//        List<List<String>> realCoStarsList = set.stream().toList();
+//        for (List<String> coS: realCoStarsList) {
+//            for (int i = 0; i < coS.size(); i++) {
+//                coS.set(i, coS.get(i).replaceAll("\\d", ""));
+//            }
+//        }
+//        for (List<String> costars: realCoStarsList) {
+//            List<Movie> coStaredMovie = movies.stream().filter(m -> m.hasCoStar(costars)).toList();
+//            if (collect.containsKey(costars)) {
+//                collect.put(costars, collect.get(costars) + 1);
+//            } else {
+//                collect.put(costars, coStaredMovie.size());
+//            }
+//
+//        }
+        List<List<String>> lists = new ArrayList<>();
         for (Movie movie: movies) {
             List<List<String>> list = movie.getCostars();
-            set.addAll(list);
+            lists.addAll(list);
         }
-        List<List<String>> realCoStarsList = set.stream().toList();
-        for (List<String> costars: realCoStarsList) {
-            List<Movie> coStaredMovie = movies.stream().filter(m -> m.hasCoStar(costars)).toList();
-            collect.put(costars, coStaredMovie.size());
+        Map<List<String>, Long> collect = lists.stream().collect(Collectors.groupingBy(Function.identity(), counting()));
+        HashMap<List<String>, Integer> map = new HashMap<>();
+        for (Map.Entry<List<String>, Long> entry : collect.entrySet()) {
+            map.put(entry.getKey(), entry.getValue().intValue());
         }
-
-//        for (int i = 0; i < 6; i++) {
-//            Stream<Movie> movieStream = movies.stream();
-//            int finalI = i;
-//            Map<List<String>, Long> temp = movieStream
-//                    .collect((Collectors.groupingBy(e -> e.getCostars().get(finalI), Collectors.counting())));
-//            collect = addMap2(collect,temp);
-//        }
-//
-//        HashMap<List<String>, Integer> map = new HashMap<>();
-//        for (Map.Entry<List<String>, Long> entry : collect.entrySet()) {
-//            map.put(entry.getKey(), entry.getValue().intValue());
-//        }
-        return collect;
+        return map.entrySet().stream().sorted(Collections.reverseOrder(comparingByValue())).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
     public Map<List<String>, Long> addMap2(Map<List<String>,Long> map1, Map<List<String>,Long> map2) {
